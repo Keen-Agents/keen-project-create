@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to Keen Project",
+            "type": "pwa-node",
+            "request": "attach",
+            "address": "__SERVER_ADDRESS__",
+            "port": 9231,
+            "timeout": 30000,
+            "skipFiles": ["<node_internals>/**"],
+            "localRoot": "${workspaceFolder}/src",
+            "remoteRoot": "__MAP__",
+            "sourceMaps": true
+        }
+    ]
+}

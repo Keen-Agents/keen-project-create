@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+set -eu
+
+if ! npx prettier --check .; then
+  echo "❌ Prettier check failed. Please run: npx prettier --write ."
+  exit 1
+fi
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+pattern='^(feature|hotfix|release|remove)\/KPC-[0-9]{3,4}$'
+
+if printf '%s' "$branch" | grep -Eq "$pattern"; then
+  exit 0
+else
+  echo "❌ Push blocked. Branch '$branch' doesn't match: <feature|fix|hotfix|release|remove>/KPC-<NUMBER: 3-4 digits>"
+  echo "   e.g. feature/KPC-1234"
+  exit 1
+fi

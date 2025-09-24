@@ -1,0 +1,8 @@
+{
+    "project_name": "sketch",
+    "agent_name": "SketchAgent",
+    "keen_server": "__REPLACE__WITH__URL__",
+    "start_agent": "Project-Start",
+    "entry": "src",
+    "dist": "dist"
+}

@@ -1,0 +1,16 @@
+{
+    "name": "keen__sketch__project",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "keen-builder"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "keen-builder": "^1.0.1"
+    }
+}
