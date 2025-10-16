@@ -2,16 +2,16 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Keen Project",
-            "type": "pwa-node",
+            "name": "Attach to Keen",
+            "type": "node",
             "request": "attach",
-            "address": "__SERVER_ADDRESS__",
-            "port": 9231,
+            "address": "<__REPLACE__>",
+            "port": 9229,
             "timeout": 30000,
             "skipFiles": ["<node_internals>/**"],
+            "sourceMaps": true,
             "localRoot": "${workspaceFolder}/src",
-            "remoteRoot": "__MAP__",
-            "sourceMaps": true
+            "remoteRoot": "/app/projects/sketch"
         }
     ]
 }
