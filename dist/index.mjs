@@ -39,7 +39,8 @@ const projectType = (typeFromFlag || positionalType || '').toLowerCase();
 const TEMPLATE_DEFAULT = path.resolve(__dirname, '../templates/default');
 const TEMPLATE_VSCODE = path.resolve(__dirname, '../templates/vscode');
 
-const TEMPLATE_DIR = projectType === 'vscode' ? TEMPLATE_VSCODE : TEMPLATE_DEFAULT;
+//const TEMPLATE_DIR = projectType === 'vscode' ? TEMPLATE_VSCODE : TEMPLATE_DEFAULT;
+const TEMPLATE_DIR =  TEMPLATE_VSCODE;
 
 const targetDir = path.resolve(process.cwd(), projectNameArg);
 
@@ -106,6 +107,18 @@ function runInstall(cwd, pm = 'npm') {
     const pkgJsonPath = path.join(targetDir, 'package.json');
     await replaceInFile(pkgJsonPath, {
         __APP_NAME__: projectNameArg
+    });
+
+    // Apply props inside the "templates/vscode/launch.json" file 
+    const launchFile = path.join(targetDir, '.vscode', 'launch.json');
+    await replaceInFile(launchFile, {
+        __PROJECT_NAME_REPLACE__ : projectNameArg
+    });
+
+    // Apply props inside the "templates/keen.json" file 
+    const keenJsonFile = path.join(targetDir, 'keen.json');
+    await replaceInFile(keenJsonFile, {
+        __PROJECT_NAME_REPLACE__ : projectNameArg
     });
 
     // Install deps
