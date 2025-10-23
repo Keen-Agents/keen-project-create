@@ -11,7 +11,7 @@
             "skipFiles": ["<node_internals>/**"],
             "sourceMaps": true,
             "localRoot": "${workspaceFolder}/src",
-            "remoteRoot": "/app/projects/sketch"
+            "remoteRoot": "/app/projects/__PROJECT_NAME_REPLACE__"
         }
     ]
 }
