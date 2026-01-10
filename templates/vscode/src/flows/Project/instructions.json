@@ -1,0 +1,35 @@
+{
+  "$schema": "keen-flow-instructions-v1",
+  "flowId": "Project",
+  "flowLabel": "Start",
+  "nodes": [
+    {
+      "id": "startNode_default_start",
+      "type": "startNode_",
+      "label": "Start"
+    },
+    {
+      "id": "agentNode_default_agent",
+      "type": "agentNode_broadcaster__receiver_",
+      "agentRef": "Agent-__PROJECT_NAME_REPLACE__"
+    },
+    {
+      "id": "endNode_default_end",
+      "type": "endNode_"
+    }
+  ],
+  "edges": [
+    {
+      "source": "startNode_default_start",
+      "target": "agentNode_default_agent",
+      "sourceHandle": "NEXT_1",
+      "targetHandle": "IN"
+    },
+    {
+      "source": "agentNode_default_agent",
+      "target": "endNode_default_end",
+      "sourceHandle": "NEXT_1",
+      "targetHandle": "IN"
+    }
+  ]
+}

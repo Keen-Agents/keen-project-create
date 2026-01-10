@@ -1,5 +1,87 @@
 {
-    "nodes": [],
-    "edges": [],
-    "viewport": { "x": 0, "y": 0, "zoom": 1 }
+  "nodes": [
+    {
+      "id": "startNode_default_start",
+      "type": "startNode_",
+      "position": {
+        "x": 450,
+        "y": 50
+      },
+      "data": {
+        "label": "startNode_",
+        "nodeIDs": [],
+        "settings": {
+          "label": "Start"
+        }
+      }
+    },
+    {
+      "id": "agentNode_default_agent",
+      "type": "agentNode_broadcaster__receiver_",
+      "position": {
+        "x": 450,
+        "y": 250
+      },
+      "data": {
+        "label": "agentNode_broadcaster__receiver_",
+        "nodeIDs": [],
+        "settings": {
+          "agentName": "Agent-__PROJECT_NAME_REPLACE__",
+          "prompts": [
+            {
+              "role": "system",
+              "content": "You are a helpful assistant."
+            }
+          ],
+          "llm": {
+            "company": "google",
+            "model": "gemini-2.0-flash",
+            "modelId": 4918,
+            "parameters": {
+              "temperature": 0.8,
+              "top_p": 0.8,
+              "maxTokens": 65536
+            }
+          },
+          "filePaths": []
+        }
+      }
+    },
+    {
+      "id": "endNode_default_end",
+      "type": "endNode_",
+      "position": {
+        "x": 450,
+        "y": 450
+      },
+      "data": {
+        "label": "endNode_",
+        "nodeIDs": [],
+        "settings": {}
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "xy-edge__startNode_default_start[NEXT_1_||_startNode_default_start]-agentNode_default_agent[IN_||_agentNode_default_agent]",
+      "source": "startNode_default_start",
+      "target": "agentNode_default_agent",
+      "sourceHandle": "[NEXT_1_||_startNode_default_start]",
+      "targetHandle": "[IN_||_agentNode_default_agent]",
+      "type": "projectEdge"
+    },
+    {
+      "id": "xy-edge__agentNode_default_agent[NEXT_1_||_agentNode_default_agent]-endNode_default_end[IN_||_endNode_default_end]",
+      "source": "agentNode_default_agent",
+      "target": "endNode_default_end",
+      "sourceHandle": "[NEXT_1_||_agentNode_default_agent]",
+      "targetHandle": "[IN_||_endNode_default_end]",
+      "type": "projectEdge"
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
 }

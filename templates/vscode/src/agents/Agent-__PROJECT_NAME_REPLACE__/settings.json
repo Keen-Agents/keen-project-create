@@ -1,0 +1,14 @@
+{
+  "agentName": "Agent-__PROJECT_NAME_REPLACE__",
+  "llm": {
+    "company": "google",
+    "model": "gemini-2.0-flash",
+    "modelId": 4918,
+    "parameters": {
+      "temperature": 0.8,
+      "top_p": 0.8,
+      "maxTokens": 65536
+    }
+  },
+  "filePaths": []
+}

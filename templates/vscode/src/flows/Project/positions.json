@@ -1,0 +1,22 @@
+{
+  "$schema": "keen-flow-positions-v1",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "nodes": {
+    "startNode_default_start": {
+      "x": 450,
+      "y": 50
+    },
+    "agentNode_default_agent": {
+      "x": 450,
+      "y": 250
+    },
+    "endNode_default_end": {
+      "x": 450,
+      "y": 450
+    }
+  }
+}

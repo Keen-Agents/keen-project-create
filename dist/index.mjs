@@ -115,10 +115,37 @@ function runInstall(cwd, pm = 'npm') {
         __PROJECT_NAME_REPLACE__ : projectNameArg
     });
 
-    // Apply props inside the "templates/keen.json" file 
+    // Apply props inside the "templates/keen.json" file
     const keenJsonFile = path.join(targetDir, 'keen.json');
     await replaceInFile(keenJsonFile, {
         __PROJECT_NAME_REPLACE__ : projectNameArg
+    });
+
+    // Rename agent folder from template placeholder to actual project name
+    const agentTemplateName = 'Agent-__PROJECT_NAME_REPLACE__';
+    const agentActualName = `Agent-${projectNameArg}`;
+    const agentTemplateDir = path.join(targetDir, 'src', 'agents', agentTemplateName);
+    const agentActualDir = path.join(targetDir, 'src', 'agents', agentActualName);
+    if (fs.existsSync(agentTemplateDir)) {
+        await fsp.rename(agentTemplateDir, agentActualDir);
+    }
+
+    // Apply props inside agent settings.json
+    const agentSettingsFile = path.join(agentActualDir, 'settings.json');
+    await replaceInFile(agentSettingsFile, {
+        __PROJECT_NAME_REPLACE__: projectNameArg
+    });
+
+    // Apply props inside flow instructions.json
+    const flowInstructionsFile = path.join(targetDir, 'src', 'flows', 'Project', 'instructions.json');
+    await replaceInFile(flowInstructionsFile, {
+        __PROJECT_NAME_REPLACE__: projectNameArg
+    });
+
+    // Apply props inside Project.flow.json (human viewport visualization)
+    const projectFlowFile = path.join(targetDir, 'src', 'flows', 'Project.flow.json');
+    await replaceInFile(projectFlowFile, {
+        __PROJECT_NAME_REPLACE__: projectNameArg
     });
 
     // Install deps
