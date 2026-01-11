@@ -1,8 +1,14 @@
 {
     "project_name": "__PROJECT_NAME_REPLACE__",
-    "agent": "Agent-__PROJECT_NAME_REPLACE__",
     "keen_server": "<__REPLACE__WITH__URL__>",
-    "start_agent": "Project-Start",
     "entry": "src",
-    "dist": "dist"
+    "dist": "dist",
+    "agents": [
+        {
+            "id": "__PROJECT_NAME_REPLACE__",
+            "name": "Agent-__PROJECT_NAME_REPLACE__",
+            "entry_flow": "Project",
+            "entry_node": "Start"
+        }
+    ]
 }

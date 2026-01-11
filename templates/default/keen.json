@@ -1,8 +1,14 @@
 {
-    "project_name": "sketch",
-    "agent_name": "SketchAgent",
-    "keen_server": "__REPLACE__WITH__URL__",
-    "start_agent": "Project-Start",
+    "project_name": "__PROJECT_NAME_REPLACE__",
+    "keen_server": "<__REPLACE__WITH__URL__>",
     "entry": "src",
-    "dist": "dist"
+    "dist": "dist",
+    "agents": [
+        {
+            "id": "__PROJECT_NAME_REPLACE__",
+            "name": "Agent-__PROJECT_NAME_REPLACE__",
+            "entry_flow": "Project",
+            "entry_node": "Start"
+        }
+    ]
 }
