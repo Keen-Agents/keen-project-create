@@ -1,5 +1,5 @@
-export function debux(debux_id) {
-    return debux_id;
+// Debugging entry point - breakpoint condition checks global.dictionary.debux_id
+export function exec() {
+    // This line exists to provide a valid breakpoint target
+    const nodeId = global.dictionary?.debux_id;
 }
-
-global.debux = debux;
