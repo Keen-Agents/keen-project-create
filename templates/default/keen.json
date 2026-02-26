@@ -1,3 +1,5 @@
 {
-    "keen_server": "<YOUR_SERVER_URL e.g. http://yourcompany.keenagents.ai>"
+    "keen_server": "<YOUR_SERVER_URL e.g. http://yourcompany.keenagents.ai>",
+    "entry": "src",
+    "dist": "dist"
 }
