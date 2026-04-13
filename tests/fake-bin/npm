@@ -1,3 +1,6 @@
 #!/bin/sh
+if [ -n "$KPC_FAKE_NPM_LOG" ]; then
+    printf "%s|%s\n" "$PWD" "$*" >> "$KPC_FAKE_NPM_LOG"
+fi
 echo "[stubbed] npm $@"
 exit 0

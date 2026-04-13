@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`keen-project-create CLI > emits the documented file tree 1`] = `
+[
+  ".gitignore",
+  ".prettierignore",
+  ".prettierrc",
+  ".vscode/launch.json",
+  ".vscode/settings.json",
+  "keen-tools.json",
+  "keen.json",
+  "package.json",
+  "src/agents/Agent-snap-test/00-system.md",
+  "src/agents/Agent-snap-test/settings.json",
+  "src/flows/Project.flow.json",
+  "src/flows/Project/instructions.json",
+  "src/flows/Project/node-settings.json",
+  "src/flows/Project/positions.json",
+  "src/scripts/debux.js",
+]
+`;
