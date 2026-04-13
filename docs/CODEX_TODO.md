@@ -1,0 +1,7 @@
+- [x] Vitest setup + fake-bin shim
+- [ ] Smoke + Bug E regression
+- [ ] Type flag parsing variants
+- [ ] Placeholder replacement + agent folder rename
+- [ ] Empty name + non-empty dir errors
+- [ ] File tree snapshot
+- [ ] Findings doc + commit + push
