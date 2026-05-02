@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@keen-agents/keen-flow-types": ["../keen-flow-types/src/index"],
+      "@keen-agents/keen-flow-types/*": ["../keen-flow-types/src/*"]
+    }
+  },
+  "include": ["dist/**/*.mjs", "templates/**/*.js", "tests/**/*.js"]
+}
