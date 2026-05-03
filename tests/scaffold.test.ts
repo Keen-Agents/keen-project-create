@@ -307,6 +307,26 @@ describe('keen-project-create CLI', () => {
         expect(readFileSync(join(tmp, 'parent', 'existing', 'file.txt'), 'utf8')).toBe('x');
     });
 
+    it('re-runs idempotently on an existing Keen project without overwriting Pascal-field settings', () => {
+        const { projectDir } = scaffold(['support-project']);
+        const settingsPath = join(projectDir, 'src', 'agents', 'Agent-support-project', 'settings.json');
+        const fixture = {
+            agentName: 'Support Bot',
+            agentId: 'support-prod',
+            sessionId: 'session-contract',
+            requestId: 'request-contract',
+            useParentDictionary: true,
+            dictionaryKey: 'support.dictionary'
+        };
+        writeFileSync(settingsPath, JSON.stringify(fixture, null, 2));
+
+        const result = runCli(['support-project']);
+
+        expect(result.status, formatResult(result)).toBe(0);
+        expect(JSON.parse(readFileSync(settingsPath, 'utf8'))).toEqual(fixture);
+        expect(existsSync(join(projectDir, 'src', 'agents', 'Agent-__PROJECT_NAME_REPLACE__'))).toBe(false);
+    });
+
     it('emits the documented file tree', () => {
         const { projectDir } = scaffold(['snap-test']);
 

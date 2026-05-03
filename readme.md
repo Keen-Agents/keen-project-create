@@ -24,6 +24,14 @@ VSCode template with prettrier and debugger
 npx keen-project-create <PROJECT_DIR> vscode
 ```
 
+Existing Keen projects can be re-run idempotently:
+
+```
+npx keen-project-create <EXISTING_KEEN_PROJECT_DIR>
+```
+
+The CLI treats a non-empty target as safe only when it already contains `keen.json`. In that case it copies missing template files without overwriting existing files, preserving agent `settings.json` values such as `agentName`, `agentId`, `sessionId`, `requestId`, `useParentDictionary`, and `dictionaryKey`. Arbitrary non-empty directories are still refused.
+
 ---
 
 ## 📝 Code Standards

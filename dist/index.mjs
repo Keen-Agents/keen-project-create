@@ -56,24 +56,35 @@ async function ensureDirEmptyOrCreate(dir) {
         await fsp.mkdir(dir, { recursive: true });
         const items = await fsp.readdir(dir);
         if (items.length > 0) {
-            console.error(`Target directory is not empty: ${dir}`);
-            process.exit(1);
+            const existingKeenProject = fs.existsSync(path.join(dir, 'keen.json'));
+            if (!existingKeenProject) {
+                console.error(`Target directory is not empty: ${dir}`);
+                process.exit(1);
+            }
+
+            return { existingKeenProject: true };
         }
+
+        return { existingKeenProject: false };
     } catch (e) {
         console.error('Failed creating target directory:', e);
         process.exit(1);
     }
 }
 
-async function copyDir(src, dest) {
+async function copyDir(src, dest, options = {}) {
+    const overwrite = options.overwrite ?? true;
     await fsp.mkdir(dest, { recursive: true });
     const entries = await fsp.readdir(src, { withFileTypes: true });
     for (const entry of entries) {
         const s = path.join(src, entry.name);
         const d = path.join(dest, entry.name);
         if (entry.isDirectory()) {
-            await copyDir(s, d);
+            await copyDir(s, d, options);
         } else {
+            if (!overwrite && fs.existsSync(d)) {
+                continue;
+            }
             await fsp.copyFile(s, d);
         }
     }
@@ -119,10 +130,10 @@ function assertValidAgentSlug(slug) {
 
 (async () => {
     console.log(`> Creating project: ${projectNameArg}`);
-    await ensureDirEmptyOrCreate(targetDir);
+    const { existingKeenProject } = await ensureDirEmptyOrCreate(targetDir);
 
     console.log('> Copying template…');
-    await copyDir(TEMPLATE_DIR, targetDir);
+    await copyDir(TEMPLATE_DIR, targetDir, { overwrite: !existingKeenProject });
 
     // Optional: personalize package.json
     const pkgJsonPath = path.join(targetDir, 'package.json');
@@ -150,7 +161,12 @@ function assertValidAgentSlug(slug) {
     const agentTemplateDir = path.join(targetDir, 'src', 'agents', agentTemplateName);
     const agentActualDir = path.join(targetDir, 'src', 'agents', agentActualName);
     if (fs.existsSync(agentTemplateDir)) {
-        await fsp.rename(agentTemplateDir, agentActualDir);
+        if (fs.existsSync(agentActualDir)) {
+            await copyDir(agentTemplateDir, agentActualDir, { overwrite: false });
+            await fsp.rm(agentTemplateDir, { recursive: true, force: true });
+        } else {
+            await fsp.rename(agentTemplateDir, agentActualDir);
+        }
     }
 
     // Apply props inside agent settings.json
