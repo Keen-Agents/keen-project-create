@@ -3,13 +3,15 @@ import { existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, 
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '..');
 const CLI = resolve(ROOT, 'dist/index.mjs');
 const FAKE_BIN = resolve(HERE, 'fake-bin');
 const PATH_SEP = process.platform === 'win32' ? ';' : ':';
+
+vi.setConfig({ testTimeout: 15_000 });
 
 describe('keen-project-create CLI', () => {
     let tmp: string;
@@ -137,6 +139,23 @@ describe('keen-project-create CLI', () => {
 
         expect(settingsJson).toContain('"agentName": "Agent-my-cool-app"');
         expect(settingsJson).not.toContain('__PROJECT_NAME_REPLACE__');
+    });
+
+    it('emits host-schema compatible keen.json agent defaults', () => {
+        const { projectDir } = scaffold(['my-cool-app']);
+        const keenJson = JSON.parse(readFileSync(join(projectDir, 'keen.json'), 'utf8')) as {
+            agent_name?: string;
+            start_agent?: string;
+            entry?: string;
+            dist?: string;
+        };
+
+        expect(keenJson).toMatchObject({
+            agent_name: 'Agent-my-cool-app',
+            start_agent: 'Agent-my-cool-app',
+            entry: 'src',
+            dist: 'dist'
+        });
     });
 
     it('replaces __PROJECT_NAME_REPLACE__ in split-flow instructions', () => {
@@ -303,9 +322,5 @@ function listFilesRecursive(dir: string, prefix = ''): string[] {
 }
 
 function formatResult(result: ReturnType<typeof spawnSync>) {
-    return [
-        `status=${String(result.status)}`,
-        `stdout=${result.stdout ?? ''}`,
-        `stderr=${result.stderr ?? ''}`
-    ].join('\n');
+    return [`status=${String(result.status)}`, `stdout=${result.stdout ?? ''}`, `stderr=${result.stderr ?? ''}`].join('\n');
 }
