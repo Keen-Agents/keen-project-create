@@ -141,20 +141,61 @@ describe('keen-project-create CLI', () => {
         expect(settingsJson).not.toContain('__PROJECT_NAME_REPLACE__');
     });
 
-    it('emits host-schema compatible keen.json agent defaults', () => {
+    it('emits registry-compatible keen.json agent defaults', () => {
         const { projectDir } = scaffold(['my-cool-app']);
         const keenJson = JSON.parse(readFileSync(join(projectDir, 'keen.json'), 'utf8')) as {
-            agent_name?: string;
-            start_agent?: string;
+            $schema?: string;
+            version?: number;
+            project_name?: string;
+            init_map_mode?: string;
+            agents?: Array<{
+                id?: string;
+                name?: string;
+                displayName?: string;
+                entry_flow?: string;
+            }>;
             entry?: string;
             dist?: string;
         };
 
         expect(keenJson).toMatchObject({
-            agent_name: 'Agent-my-cool-app',
-            start_agent: 'Agent-my-cool-app',
+            $schema: '../../keen-flow-types/schemas/keen.json',
+            version: 1,
+            project_name: 'my-cool-app',
+            init_map_mode: 'agents-required',
+            agents: [
+                {
+                    id: 'agent-my-cool-app',
+                    name: 'Agent-my-cool-app',
+                    displayName: 'Agent-my-cool-app',
+                    entry_flow: 'Agent-my-cool-app'
+                }
+            ],
             entry: 'src',
             dist: 'dist'
+        });
+        expect(keenJson).not.toHaveProperty('agent_name');
+        expect(keenJson).not.toHaveProperty('start_agent');
+    });
+
+    it('slugifies the agent id in keen.json while preserving display names', () => {
+        const { projectDir } = scaffold(['Has Spaces']);
+        const keenJson = JSON.parse(readFileSync(join(projectDir, 'keen.json'), 'utf8')) as {
+            project_name?: string;
+            agents?: Array<{
+                id?: string;
+                name?: string;
+                displayName?: string;
+                entry_flow?: string;
+            }>;
+        };
+
+        expect(keenJson.project_name).toBe('Has Spaces');
+        expect(keenJson.agents?.[0]).toMatchObject({
+            id: 'agent-has-spaces',
+            name: 'Agent-Has Spaces',
+            displayName: 'Agent-Has Spaces',
+            entry_flow: 'Agent-Has Spaces'
         });
     });
 
@@ -197,6 +238,9 @@ describe('keen-project-create CLI', () => {
             }
             if (content.includes('__APP_NAME__')) {
                 hits.push(`${relativePath}:__APP_NAME__`);
+            }
+            if (content.includes('__PROJECT_NAME_REPLACE_LOWERCASE__')) {
+                hits.push(`${relativePath}:__PROJECT_NAME_REPLACE_LOWERCASE__`);
             }
 
             return hits;
@@ -242,6 +286,14 @@ describe('keen-project-create CLI', () => {
 
         expect(result.status).toBe(1);
         expect(result.stderr).toContain('Usage: keen-project-create <project-name>');
+    });
+
+    it('exits non-zero when the project name cannot produce a valid agent slug', () => {
+        const result = runCli(['!@#$%']);
+
+        expect(result.status).toBe(1);
+        expect(result.stderr).toContain('Invalid project name');
+        expect(existsSync(join(tmp, '!@#$%'))).toBe(false);
     });
 
     it('refuses to scaffold into a non-empty directory', () => {

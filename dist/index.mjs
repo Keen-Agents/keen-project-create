@@ -34,13 +34,20 @@ if (!projectNameArg) {
 }
 
 const projectType = (typeFromFlag || positionalType || '').toLowerCase();
+const projectSlug = toAgentSlug(projectNameArg);
+try {
+    assertValidAgentSlug(projectSlug);
+} catch {
+    console.error(`Invalid project name: "${projectNameArg}". It must produce a non-empty agent slug matching /^[a-z0-9-]+$/ after normalization.`);
+    process.exit(1);
+}
 
 // Resolve paths
 const TEMPLATE_DEFAULT = path.resolve(__dirname, '../templates/default');
 const TEMPLATE_VSCODE = path.resolve(__dirname, '../templates/vscode');
 
 //const TEMPLATE_DIR = projectType === 'vscode' ? TEMPLATE_VSCODE : TEMPLATE_DEFAULT;
-const TEMPLATE_DIR =  TEMPLATE_VSCODE;
+const TEMPLATE_DIR = TEMPLATE_VSCODE;
 
 const targetDir = path.resolve(process.cwd(), projectNameArg);
 
@@ -96,6 +103,20 @@ function runInstall(cwd, pm = 'npm') {
     });
 }
 
+function toAgentSlug(rawName) {
+    return rawName
+        .toLowerCase()
+        .replace(/[^a-z0-9-]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function assertValidAgentSlug(slug) {
+    if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+        throw new Error(`Invalid agent slug "${slug}": expected non-empty /^[a-z0-9-]+$/`);
+    }
+}
+
 (async () => {
     console.log(`> Creating project: ${projectNameArg}`);
     await ensureDirEmptyOrCreate(targetDir);
@@ -109,16 +130,18 @@ function runInstall(cwd, pm = 'npm') {
         __APP_NAME__: projectNameArg
     });
 
-    // Apply props inside the "templates/vscode/launch.json" file 
+    // Apply props inside the "templates/vscode/launch.json" file
     const launchFile = path.join(targetDir, '.vscode', 'launch.json');
     await replaceInFile(launchFile, {
-        __PROJECT_NAME_REPLACE__ : projectNameArg
+        __PROJECT_NAME_REPLACE__: projectNameArg,
+        __PROJECT_NAME_REPLACE_LOWERCASE__: projectSlug
     });
 
     // Apply props inside the "templates/keen.json" file
     const keenJsonFile = path.join(targetDir, 'keen.json');
     await replaceInFile(keenJsonFile, {
-        __PROJECT_NAME_REPLACE__ : projectNameArg
+        __PROJECT_NAME_REPLACE__: projectNameArg,
+        __PROJECT_NAME_REPLACE_LOWERCASE__: projectSlug
     });
 
     // Rename agent folder from template placeholder to actual project name
@@ -133,19 +156,22 @@ function runInstall(cwd, pm = 'npm') {
     // Apply props inside agent settings.json
     const agentSettingsFile = path.join(agentActualDir, 'settings.json');
     await replaceInFile(agentSettingsFile, {
-        __PROJECT_NAME_REPLACE__: projectNameArg
+        __PROJECT_NAME_REPLACE__: projectNameArg,
+        __PROJECT_NAME_REPLACE_LOWERCASE__: projectSlug
     });
 
     // Apply props inside flow instructions.json
     const flowInstructionsFile = path.join(targetDir, 'src', 'flows', 'Project', 'instructions.json');
     await replaceInFile(flowInstructionsFile, {
-        __PROJECT_NAME_REPLACE__: projectNameArg
+        __PROJECT_NAME_REPLACE__: projectNameArg,
+        __PROJECT_NAME_REPLACE_LOWERCASE__: projectSlug
     });
 
     // Apply props inside Project.flow.json (human viewport visualization)
     const projectFlowFile = path.join(targetDir, 'src', 'flows', 'Project.flow.json');
     await replaceInFile(projectFlowFile, {
-        __PROJECT_NAME_REPLACE__: projectNameArg
+        __PROJECT_NAME_REPLACE__: projectNameArg,
+        __PROJECT_NAME_REPLACE_LOWERCASE__: projectSlug
     });
 
     // Install deps

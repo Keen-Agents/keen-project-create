@@ -1,7 +1,17 @@
 {
-    "agent_name": "Agent-__PROJECT_NAME_REPLACE__",
+    "$schema": "../../keen-flow-types/schemas/keen.json",
+    "version": 1,
+    "project_name": "__PROJECT_NAME_REPLACE__",
     "keen_server": "<YOUR_SERVER_URL e.g. http://yourcompany.keenagents.ai>",
-    "start_agent": "Agent-__PROJECT_NAME_REPLACE__",
+    "init_map_mode": "agents-required",
+    "agents": [
+        {
+            "id": "agent-__PROJECT_NAME_REPLACE_LOWERCASE__",
+            "name": "Agent-__PROJECT_NAME_REPLACE__",
+            "displayName": "Agent-__PROJECT_NAME_REPLACE__",
+            "entry_flow": "Agent-__PROJECT_NAME_REPLACE__"
+        }
+    ],
     "entry": "src",
     "dist": "dist"
 }
