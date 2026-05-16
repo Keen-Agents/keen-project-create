@@ -4,7 +4,8 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "dev": "keen-builder"
+        "dev": "keen-builder dev",
+        "deploy": "keen-builder deploy"
     },
     "keywords": [],
     "author": "",
