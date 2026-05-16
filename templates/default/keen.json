@@ -1,5 +1,5 @@
 {
-    "keen_server": "<YOUR_SERVER_URL e.g. http://yourcompany.keenagents.ai>",
+    "keen_server": "http://localhost:7000",
     "entry": "src",
     "dist": "dist"
 }

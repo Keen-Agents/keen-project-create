@@ -2,7 +2,7 @@
     "$schema": "../../keen-flow-types/schemas/keen.json",
     "version": 1,
     "project_name": "__PROJECT_NAME_REPLACE__",
-    "keen_server": "<YOUR_SERVER_URL e.g. http://yourcompany.keenagents.ai>",
+    "keen_server": "http://localhost:7000",
     "init_map_mode": "agents-required",
     "agents": [
         {
