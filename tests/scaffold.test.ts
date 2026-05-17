@@ -60,6 +60,14 @@ describe('keen-project-create CLI', () => {
         expect(existsSync(join(projectDir, '.prettierrc'))).toBe(true);
     });
 
+    it('gitignores Keen runtime observability and journal state', () => {
+        const { projectDir } = scaffold(['test-project']);
+        const gitignore = readFileSync(join(projectDir, '.gitignore'), 'utf8');
+
+        expect(gitignore).toContain('.keen/.runtime/');
+        expect(gitignore).toContain('.keen/journals/');
+    });
+
     it('prints the next steps after a successful scaffold', () => {
         const result = scaffold(['next-steps']);
 
